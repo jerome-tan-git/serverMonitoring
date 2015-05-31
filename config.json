@@ -1,0 +1,13 @@
+{
+	"password":"123qweQWE",
+	"processList":[{
+		"processName":"TestProcessName",
+		"processNameRegex":"Test process regex"
+	}],
+	"serverList":[{
+		"password":"",
+		"serverAddress":"121.40.187.96",
+		"userName":""
+	}],
+	"userName":"root"
+}
