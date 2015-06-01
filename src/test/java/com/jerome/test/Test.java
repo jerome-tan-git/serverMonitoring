@@ -45,16 +45,22 @@ public class Test {
 		Config conf = ReadConfig.readConfig("./config.json");
 		System.out.println(conf.getServerList().get(0).getServerAddress());
 		JSch jsch = new JSch();  
-		
-        Session session = jsch.getSession(conf.getUserName(), conf.getServerList().get(0).getServerAddress(), 22);  
-        session.setPassword(conf.getPassword());  
+		ServerObj so = conf.getServerList().get(0);
+		System.out.println(so);
+        Session session = jsch.getSession(so.getUserName(), so.getServerAddress(), 22);  
+        session.setPassword(so.getPassword());  
         java.util.Properties config = new java.util.Properties();  
         config.put("StrictHostKeyChecking", "no");  
         session.setConfig(config);  
         session.connect();  
 //        String command = "cat /proc/loadavg";  
 //        String command = "ps aux | grep java";
+//        String command = "top";
         String command = "cat /proc/stat";
+        
+//        String command = "netstat -anp";
+//        String command = "nload";
+        //
 //        String command = "cat /proc/cpuinfo";
 //        String command = "cat /proc/meminfo";  
         ///proc/stat
@@ -64,16 +70,64 @@ public class Test {
         channel.setInputStream(null);  
         ((ChannelExec) channel).setErrStream(System.err);  
           
-        channel.connect();  	
+        channel.connect();  
+        long startTime = System.currentTimeMillis();  
         InputStream in = channel.getInputStream();  
         BufferedReader reader = new BufferedReader(new InputStreamReader(in, Charset.forName(charset)));  
-        String buf = null;  
-        while ((buf = reader.readLine()) != null)  
+        String line = null;  
+        long idleCpuTime1 = 0, totalCpuTime1 = 0;
+        while ((line = reader.readLine()) != null)  
         {  
-            System.out.println(buf);  
+        	 if(line.startsWith("cpu")){  
+                 line = line.trim();    
+                 String[] temp = line.split("\\s+");   
+                 idleCpuTime1 = Long.parseLong(temp[4]);  
+                 for(String s : temp){  
+                     if(!s.equals("cpu")){  
+                         totalCpuTime1 += Long.parseLong(s);  
+                     }  
+                 }     
+                 System.out.println("IdleCpuTime: " + idleCpuTime1 + ", " + "TotalCpuTime: " + totalCpuTime1);  
+                 break;  
+             }   
         }  
-        reader.close();  
+        
+        reader.close(); 
+        channel.disconnect();  
+
+        
+        
+        
+        charset = "UTF-8";  
+        channel = session.openChannel("exec");  
+        ((ChannelExec) channel).setCommand(command);  
+        channel.setInputStream(null);  
+        ((ChannelExec) channel).setErrStream(System.err);  
+        channel.connect();  
+        long startTime1 = System.currentTimeMillis();  
+        InputStream in1 = channel.getInputStream();  
+        BufferedReader in2 = new BufferedReader(new InputStreamReader(in1, Charset.forName(charset)));  
+        long idleCpuTime2 = 0, totalCpuTime2 = 0;   //分别为系统启动后空闲的CPU时间和总的CPU时间  
+        while((line=in2.readLine()) != null){     
+            if(line.startsWith("cpu")){  
+                line = line.trim();   
+                String[] temp = line.split("\\s+");   
+                idleCpuTime2 = Long.parseLong(temp[4]);  
+                for(String s : temp){  
+                    if(!s.equals("cpu")){  
+                        totalCpuTime2 += Long.parseLong(s);  
+                    }  
+                }  
+                System.out.println("IdleCpuTime: " + idleCpuTime2 + ", " + "TotalCpuTime: " + totalCpuTime2);  
+                break;    
+            }                                 
+        }   
+        reader.close(); 
         channel.disconnect();  
         session.disconnect();  
+        if(idleCpuTime1 != 0 && totalCpuTime1 !=0 && idleCpuTime2 != 0 && totalCpuTime2 !=0){  
+            float cpuUsage = 1 - (float)(idleCpuTime2 - idleCpuTime1)/(float)(totalCpuTime2 - totalCpuTime1);  
+            System.out.println("本节点CPU使用率为: " + cpuUsage);  
+        } 
 	}
 }

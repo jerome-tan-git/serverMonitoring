@@ -37,7 +37,15 @@ public class Config {
 		this.serverList = serverList;
 	}
 	public List<ProcessObj> getProcessList() {
-
+		for(ProcessObj po: this.processList)
+		{
+			if(po.getUserName() == null || po.getUserName().trim().equals(""))
+			{
+				System.out.println("Set username: " + this.userName);
+				po.setUserName(this.userName);
+				po.setPassword(this.password);
+			}
+		}
 		return processList;
 	}
 	public void setProcessList(List<ProcessObj> processList) {

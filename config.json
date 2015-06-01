@@ -1,13 +1,18 @@
 {
-	"password":"123qweQWE",
+	"password":"123!@#QWEqwe",
+	"userName":"jetan",
 	"processList":[{
 		"processName":"TestProcessName",
 		"processNameRegex":"Test process regex"
+		"serverAddress":"task101.dev.la.mezimedia.com",
+		"userName":"",
+		"password":""
 	}],
-	"serverList":[{
-		"password":"",
-		"serverAddress":"121.40.187.96",
-		"userName":""
-	}],
-	"userName":"root"
+	"serverList":[
+	{
+		"userName":"",
+		"serverAddress":"task101.dev.la.mezimedia.com",
+		"password":""
+	}]
+	
 }
