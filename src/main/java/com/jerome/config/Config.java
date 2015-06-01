@@ -21,15 +21,27 @@ public class Config {
 		this.password = password;
 	}
 	public List<ServerObj> getServerList() {
+		for(ServerObj so: this.serverList)
+		{
+			if(so.getUserName() == null || so.getUserName().trim().equals(""))
+			{
+				System.out.println("Set username: " + this.userName);
+				so.setUserName(this.userName);
+				so.setPassword(this.password);
+			}
+		}
 		return serverList;
 	}
 	public void setServerList(List<ServerObj> serverList) {
+
 		this.serverList = serverList;
 	}
 	public List<ProcessObj> getProcessList() {
+
 		return processList;
 	}
 	public void setProcessList(List<ProcessObj> processList) {
+		
 		this.processList = processList;
 	}
 }

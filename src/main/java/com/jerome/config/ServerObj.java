@@ -22,5 +22,8 @@ public class ServerObj {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	
+	public String toString()
+	{
+		return "Server add:" + this.serverAddress + " userName: " + this.userName + " password: " + this.password;
+	}
 }
