@@ -6,8 +6,16 @@ import java.util.List;
 public class Config {
 	private String userName;
 	private String password;
+	private int threadCount;
 	private List<ServerObj> serverList = new ArrayList<ServerObj>();
 	private List<ProcessObj> processList = new ArrayList<ProcessObj>();
+	
+	public int getThreadCount() {
+		return threadCount;
+	}
+	public void setThreadCount(int threadCount) {
+		this.threadCount = threadCount;
+	}
 	public String getUserName() {
 		return userName;
 	}
