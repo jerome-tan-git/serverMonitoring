@@ -11,7 +11,7 @@ public class Worker extends UntypedActor{
 //            System.out.println(Thread.currentThread().getName() + " sleep end");
             System.out.println("接收的消息：" + _msg);
             // 返回一个消息
-            this.getSender().tell("hello world", this.getSelf());
+            this.getSender().tell("hello world"+ _msg, this.getSelf());
 //            System.out.println("sender path=" + this.getSender().path());
 //            getContext().stop(this.getSelf());
 //            System.out.println("|||{} has stop : " + this.getSelf().path());

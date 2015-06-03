@@ -34,7 +34,7 @@ public class StartValidate {
 		this.conf = _conf;
 		child = system.actorOf(new RoundRobinPool(this.conf.getThreadCount())
 				.props(Props.create(Worker.class)), "works");
-		timeout = new Timeout(Duration.create(3, "seconds"));
+		timeout = new Timeout(Duration.create(20, "seconds"));
 	}
 
 	public void startValidate() throws Exception {
@@ -58,7 +58,7 @@ public class StartValidate {
 				return result;
 			}
 		}, ec);
-		System.out.println(Await.result(fr, Duration.create(10, "s")));
+		System.out.println(Await.result(fr, Duration.create(30, "s")));
 		fr.onSuccess(new OnSuccess<String>() {
             @Override
             public void onSuccess(String result) {
